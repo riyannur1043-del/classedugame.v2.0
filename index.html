@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>EduVerse Nusantara Adventure</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  --p:#6C3DD3; --pl:#8B5CF6; --sec:#F59E0B; --acc:#10B981;
+  --dan:#EF4444; --bg:#0F0A2E; --bg2:#1A1040; --bg3:#251855;
+  --card:rgba(255,255,255,0.07); --cb:rgba(255,255,255,0.12);
+  --tx:#F0EEFF; --txm:rgba(240,238,255,0.6);
+  --r:14px; --rl:20px;
+  --nav-h:64px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;overflow-x:hidden}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--bg); color:var(--tx);
+  min-height:100vh;
+  /* prevent content hiding under fixed nav */
+}
+/* ── STARS ── */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse at 20% 50%,rgba(108,61,211,.15) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 20%,rgba(16,185,129,.1) 0%,transparent 40%),
+    radial-gradient(ellipse at 60% 80%,rgba(245,158,11,.08) 0%,transparent 40%)}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.9}}
+
+/* ── PAGES ── */
+.page{display:none;position:relative;z-index:1;min-height:100vh;flex-direction:column}
+.page.active{display:flex}
+
+/* pages with bottom nav need padding */
+.page.has-nav{padding-bottom:calc(var(--nav-h) + var(--safe-bottom) + 8px)}
+
+/* ── SCROLL WRAPPER inside has-nav pages ── */
+.scroll-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 16px 8px}
+
+/* ── BOTTOM NAV ── */
+#gnav{
+  position:fixed;bottom:0;left:0;right:0;z-index:900;
+  background:rgba(10,6,30,.97);backdrop-filter:blur(16px);
+  border-top:1px solid var(--cb);
+  display:none;
+  padding:0 0 var(--safe-bottom);
+  height:calc(var(--nav-h) + var(--safe-bottom));
+}
+.gnav-inner{display:flex;justify-content:space-around;align-items:stretch;height:var(--nav-h)}
+.nb{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;background:none;border:none;color:var(--txm);
+  font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;
+  padding:0 12px;cursor:pointer;transition:color .2s;min-width:56px}
+.nb.active{color:var(--pl)}
+.nb .ni{font-size:1.35rem;line-height:1}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 28px;border-radius:50px;border:none;
+  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+  cursor:pointer;transition:all .18s;text-decoration:none;width:100%}
+.btn-p{background:linear-gradient(135deg,var(--p),var(--pl));color:#fff;
+  box-shadow:0 6px 24px rgba(108,61,211,.45)}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 10px 32px rgba(108,61,211,.6)}
+.btn-s{background:var(--card);color:var(--tx);border:1.5px solid var(--cb)}
+.btn-s:hover{background:rgba(255,255,255,.12)}
+.btn-g{background:linear-gradient(135deg,var(--acc),#059669);color:#fff;
+  box-shadow:0 6px 20px rgba(16,185,129,.35)}
+.btn-d{background:linear-gradient(135deg,var(--dan),#DC2626);color:#fff}
+.btn:active{transform:scale(.97)}
+.btn-sm{padding:9px 18px;font-size:.82rem}
+
+/* ── FORMS ── */
+.fc{width:100%;padding:12px 14px;border-radius:12px;
+  background:rgba(255,255,255,.08);border:1.5px solid var(--cb);
+  color:var(--tx);font-family:'Nunito',sans-serif;font-size:.95rem;transition:border-color .2s}
+.fc:focus{outline:none;border-color:var(--pl);background:rgba(139,92,246,.1)}
+.fc option{background:#1A1040}
+.flabel{display:block;font-size:.78rem;font-weight:700;color:var(--txm);
+  margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.fgroup{margin-bottom:14px}
+
+/* ── CARD ── */
+.card{background:var(--card);border:1px solid var(--cb);border-radius:var(--rl);padding:20px}
+
+/* ── SPLASH ── */
+#splash{align-items:center;justify-content:center;text-align:center;padding:24px 20px;
+  background:linear-gradient(160deg,#0F0A2E 0%,#1A0A4E 60%,#0A1A3E 100%)}
+.logo-ring{width:110px;height:110px;border-radius:50%;
+  background:linear-gradient(135deg,var(--p),var(--acc));
+  display:flex;align-items:center;justify-content:center;font-size:50px;
+  margin:0 auto 20px;box-shadow:0 0 50px rgba(108,61,211,.6);
+  animation:pulse-logo 2.5s ease-in-out infinite}
+@keyframes pulse-logo{0%,100%{box-shadow:0 0 40px rgba(108,61,211,.5)}
+  50%{box-shadow:0 0 80px rgba(108,61,211,.9),0 0 120px rgba(16,185,129,.3)}}
+.gtitle{font-family:'Fredoka One',cursive;font-size:2.6rem;line-height:1;
+  background:linear-gradient(135deg,#fff 0%,#C4B5FD 50%,#6EE7B7 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.gsub{font-size:.85rem;color:var(--txm);margin:4px 0 24px}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.chip{background:rgba(108,61,211,.15);border:1px solid rgba(108,61,211,.3);
+  border-radius:50px;padding:4px 12px;font-size:.72rem;font-weight:700;color:#C4B5FD}
+.chip.g{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.3);color:#6EE7B7}
+.chip.y{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.3);color:#FCD34D}
+.float{animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ── LOGIN ── */
+#login{align-items:center;justify-content:flex-start;padding:20px 16px;
+  overflow-y:auto;min-height:100vh}
+.login-box{background:var(--card);border:1px solid var(--cb);
+  border-radius:var(--rl);padding:24px 20px;width:100%;max-width:420px;
+  margin:auto;backdrop-filter:blur(20px)}
+.tab-row{display:flex;gap:8px;margin-bottom:18px}
+.tab{flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--cb);
+  background:transparent;color:var(--txm);font-family:'Nunito',sans-serif;
+  font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s}
+.tab.active{background:var(--p);color:#fff;border-color:var(--p)}
+
+/* ── AVATAR ── */
+#avatar{align-items:center;justify-content:flex-start;padding:20px 16px;overflow-y:auto}
+.av-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.av-card{background:var(--card);border:2px solid var(--cb);border-radius:var(--r);
+  padding:16px 8px;text-align:center;cursor:pointer;transition:all .2s}
+.av-card:hover{border-color:var(--pl);transform:scale(1.03)}
+.av-card.sel{border-color:var(--acc);background:rgba(16,185,129,.1)}
+.av-em{font-size:2.2rem;display:block;margin-bottom:5px}
+.av-nm{font-size:.72rem;font-weight:700;color:var(--txm);line-height:1.3}
+
+/* ── TOP BAR ── */
+.topbar{display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--cb);
+  border-radius:50px;padding:8px 14px;margin-bottom:14px;flex-shrink:0}
+.tb-av{font-size:1.5rem;flex-shrink:0}
+.tb-info{flex:1;min-width:0}
+.tb-name{font-weight:800;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-meta{font-size:.7rem;color:var(--txm)}
+.xpw{flex-shrink:0;width:90px}
+.xp-lbl{font-size:.65rem;color:var(--txm);display:flex;justify-content:space-between;margin-bottom:3px}
+.xp-track{height:7px;background:rgba(255,255,255,.1);border-radius:50px;overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--p),var(--acc));border-radius:50px;transition:width .5s}
+
+/* ── WORLD GRID ── */
+.sec-title{font-family:'Fredoka One',cursive;font-size:1.4rem;margin-bottom:12px}
+.wgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.wcard{border-radius:var(--r);padding:16px 14px;cursor:pointer;
+  border:2px solid transparent;transition:all .22s;position:relative;overflow:hidden}
+.wcard:hover{transform:translateY(-2px) scale(1.02);border-color:rgba(255,255,255,.25)}
+.wcard:active{transform:scale(.98)}
+.wem{font-size:2rem;margin-bottom:6px;display:block}
+.wnm{font-weight:800;font-size:.88rem;line-height:1.3}
+.wsub{font-size:.72rem;opacity:.75;margin-top:2px}
+.wprog{font-size:.68rem;margin-top:6px;opacity:.8}
+.wbadge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.3);
+  border-radius:50px;padding:2px 7px;font-size:.65rem;font-weight:700}
+.w-math{background:linear-gradient(135deg,#1E1B4B,#312E81)}
+.w-bhs{background:linear-gradient(135deg,#1A2E1A,#14532D)}
+.w-ipas{background:linear-gradient(135deg,#0C1A2E,#0C4A6E)}
+.w-eng{background:linear-gradient(135deg,#1A1A0E,#422006)}
+.w-pai{background:linear-gradient(135deg,#1A0A1A,#4C1D95)}
+.w-ppkn{background:linear-gradient(135deg,#0A1A0A,#14532D)}
+
+/* ── MATERI LIST ── */
+.back-btn{display:inline-flex;align-items:center;gap:5px;
+  color:var(--txm);font-size:.85rem;font-weight:700;cursor:pointer;
+  margin-bottom:12px;transition:color .2s;background:none;border:none;padding:0}
+.back-btn:hover{color:var(--tx)}
+.mlist{display:flex;flex-direction:column;gap:9px}
+.mitem{background:var(--card);border:1.5px solid var(--cb);border-radius:var(--r);
+  padding:13px 14px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:all .2s}
+.mitem:hover{border-color:var(--pl);background:rgba(108,61,211,.1)}
+.mico{font-size:1.5rem;flex-shrink:0}
+.minfo{flex:1;min-width:0}
+.mnm{font-weight:700;font-size:.9rem}
+.mdesc{font-size:.74rem;color:var(--txm);margin-top:2px}
+.mbadge{font-size:.68rem;padding:3px 9px;border-radius:50px;font-weight:700;flex-shrink:0;
+  background:rgba(16,185,129,.15);color:#6EE7B7;border:1px solid rgba(16,185,129,.3)}
+.mbadge.med{background:rgba(245,158,11,.15);color:#FCD34D;border-color:rgba(245,158,11,.3)}
+.mbadge.hrd{background:rgba(239,68,68,.15);color:#FCA5A5;border-color:rgba(239,68,68,.3)}
+
+/* ── LEARN ── */
+.learn-card{background:var(--card);border:1px solid var(--cb);border-radius:var(--rl);padding:20px;margin-bottom:12px}
+.learn-ttl{font-size:1.25rem;font-weight:800;margin-bottom:12px}
+.learn-body{font-size:.9rem;line-height:1.85;color:rgba(240,238,255,.9)}
+.learn-body h3{font-size:1rem;color:var(--acc);margin:14px 0 6px}
+.learn-body b{color:#C4B5FD}
+.hl{background:rgba(108,61,211,.18);border-left:3px solid var(--pl);
+  padding:10px 13px;border-radius:0 10px 10px 0;margin:12px 0;font-style:italic;font-size:.88rem}
+.exbox{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);
+  border-radius:10px;padding:12px;margin:10px 0;font-size:.88rem}
+.exbox strong{color:var(--acc)}
+.goal-box{background:rgba(108,61,211,.1);border:1px solid rgba(108,61,211,.3);
+  border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:.82rem;color:#C4B5FD}
+
+/* ── QUIZ ── */
+.qheader{margin-bottom:14px}
+.qprog-row{display:flex;justify-content:space-between;font-size:.8rem;color:var(--txm);margin-bottom:6px}
+.qbar{height:8px;background:rgba(255,255,255,.1);border-radius:50px;overflow:hidden}
+.qfill{height:100%;background:linear-gradient(90deg,var(--p),var(--acc));border-radius:50px;transition:width .4s}
+.qcard{background:var(--card);border:1px solid var(--cb);border-radius:var(--rl);padding:20px;margin-bottom:12px}
+.qtype{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;padding:3px 10px;border-radius:50px;
+  background:rgba(108,61,211,.2);color:#C4B5FD;border:1px solid rgba(108,61,211,.3);margin-bottom:8px}
+.qtxt{font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:16px}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{width:100%;padding:13px 14px;border-radius:11px;text-align:left;
+  background:rgba(255,255,255,.05);border:2px solid var(--cb);
+  color:var(--tx);font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:600;
+  cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:9px}
+.opt:hover:not(:disabled){border-color:var(--pl);background:rgba(108,61,211,.1)}
+.opt.ok{border-color:var(--acc);background:rgba(16,185,129,.13);color:#6EE7B7}
+.opt.ng{border-color:var(--dan);background:rgba(239,68,68,.13);color:#FCA5A5}
+.opt-ltr{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0}
+.aifb{background:linear-gradient(135deg,rgba(108,61,211,.14),rgba(16,185,129,.09));
+  border:1px solid rgba(108,61,211,.28);border-radius:12px;padding:13px;margin-top:12px;
+  animation:slideUp .3s ease-out}
+@keyframes slideUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.ai-lbl{font-size:.7rem;font-weight:800;color:#C4B5FD;text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:5px}
+.ai-txt{font-size:.86rem;line-height:1.6}
+
+/* ── RESULT ── */
+.res-card{background:var(--card);border:1px solid var(--cb);
+  border-radius:var(--rl);padding:24px;text-align:center;margin-bottom:12px}
+.res-em{font-size:3.5rem;margin-bottom:4px}
+.res-ttl{font-family:'Fredoka One',cursive;font-size:1.8rem;margin-bottom:3px}
+.score-big{font-size:3.8rem;font-weight:900;
+  background:linear-gradient(135deg,var(--sec),var(--acc));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1}
+.stats-row{display:flex;gap:10px;margin:14px 0}
+.sbox{flex:1;background:rgba(255,255,255,.05);border-radius:11px;padding:12px 8px;text-align:center}
+.sval{font-size:1.4rem;font-weight:800}
+.slbl{font-size:.68rem;color:var(--txm);margin-top:2px}
+.xp-pill{display:inline-flex;align-items:center;gap:7px;
+  background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.3);
+  border-radius:50px;padding:7px 18px;font-weight:700;color:#FCD34D;font-size:.92rem}
+.badges-row{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.bdg{background:rgba(255,255,255,.07);border:1px solid var(--cb);
+  border-radius:50px;padding:5px 13px;font-size:.76rem;font-weight:700}
+
+/* ── LEADERBOARD ── */
+.lb-item{display:flex;align-items:center;gap:11px;
+  background:var(--card);border:1px solid var(--cb);
+  border-radius:var(--r);padding:11px 14px;margin-bottom:8px}
+.lb-item.me{border-color:var(--pl);background:rgba(108,61,211,.1)}
+.lb-rank{font-size:1rem;font-weight:900;width:30px;text-align:center;flex-shrink:0}
+.lb-av{font-size:1.4rem;flex-shrink:0}
+.lb-inf{flex:1;min-width:0}
+.lb-nm{font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-sch{font-size:.7rem;color:var(--txm)}
+.lb-xp{font-weight:800;color:var(--sec);font-size:.88rem;flex-shrink:0}
+
+/* ── PROFILE ── */
+#profile .scroll-body{text-align:center}
+.prof-av{font-size:5rem;margin:16px 0 4px}
+.prof-name{font-family:'Fredoka One',cursive;font-size:1.7rem}
+.prof-meta{font-size:.82rem;color:var(--txm);margin-bottom:16px}
+.prof-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.pstat{background:var(--card);border:1px solid var(--cb);border-radius:var(--r);padding:14px 8px;text-align:center}
+.pstat-v{font-size:1.5rem;font-weight:800}
+.pstat-l{font-size:.68rem;color:var(--txm);margin-top:2px}
+.danger-zone{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25);
+  border-radius:var(--r);padding:16px;margin-top:4px;text-align:left}
+.dz-title{font-weight:800;color:#FCA5A5;margin-bottom:6px;font-size:.9rem}
+.dz-desc{font-size:.78rem;color:var(--txm);margin-bottom:12px;line-height:1.5}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;
+  display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal-box{background:#1A1040;border:1px solid var(--cb);border-radius:var(--rl);
+  padding:24px 20px;width:100%;max-width:380px;text-align:center;
+  animation:slideUp .3s ease-out}
+.modal-em{font-size:3rem;margin-bottom:8px}
+.modal-ttl{font-size:1.2rem;font-weight:800;margin-bottom:6px}
+.modal-msg{font-size:.86rem;color:var(--txm);line-height:1.6;margin-bottom:20px}
+.modal-btns{display:flex;flex-direction:column;gap:9px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-bottom) + 10px);
+  left:50%;transform:translateX(-50%) translateY(12px);
+  background:rgba(26,16,64,.97);border:1px solid var(--pl);
+  border-radius:50px;padding:9px 22px;font-weight:700;font-size:.86rem;
+  opacity:0;transition:all .3s;z-index:800;white-space:nowrap;
+  pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── ANIMATIONS ── */
+@keyframes bounceIn{
+  0%{transform:scale(.3);opacity:0}
+  50%{transform:scale(1.05)}
+  70%{transform:scale(.95)}
+  100%{transform:scale(1);opacity:1}}
+.bounce-in{animation:bounceIn .55s cubic-bezier(.36,.07,.19,.97) both}
+
+/* ── UTILITY ── */
+.gap-col{display:flex;flex-direction:column;gap:9px}
+.row{display:flex;gap:9px}
+.row>.btn{flex:1}
+.mt8{margin-top:8px}
+.mt16{margin-top:16px}
+.center{text-align:center}
+</style>
+</head>
+<body>
+<div class="stars" id="starsCont"></div>
+
+<!-- ═══════════ SPLASH ═══════════ -->
+<div class="page active" id="splash">
+  <div class="float"><div class="logo-ring">🎮</div></div>
+  <div class="gtitle">EduVerse</div>
+  <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#C4B5FD;margin-bottom:4px;">Nusantara Adventure</div>
+  <div class="gsub">Platform Game Edukasi SD • Kurikulum Merdeka 🇮🇩</div>
+  <div class="chip-row">
+    <span class="chip g">✅ 7 Mata Pelajaran</span>
+    <span class="chip">🎯 Kelas 1–6</span>
+    <span class="chip y">🤖 AI Tutor</span>
+  </div>
+  <div class="gap-col" style="width:100%;max-width:340px;margin:0 auto">
+    <button class="btn btn-p" id="splashMainBtn" onclick="handleSplashMain()" style="font-size:1.1rem;padding:15px 28px">
+      🚀 Mulai Petualangan
+    </button>
+    <button class="btn btn-s" onclick="showPage('leaderboard');showNav()">🏆 Leaderboard</button>
+  </div>
+  <div style="margin-top:24px;font-size:.7rem;color:var(--txm)">
+    © 2026 EduVerse • Riyan, Syarifah & Nabila
+  </div>
+</div>
+
+<!-- ═══════════ LOGIN ═══════════ -->
+<div class="page" id="login">
+  <div class="login-box bounce-in">
+    <div style="font-size:1.9rem;margin-bottom:4px">👋</div>
+    <div style="font-size:1.4rem;font-weight:800;margin-bottom:2px">Masuk ke EduVerse</div>
+    <div style="font-size:.8rem;color:var(--txm);margin-bottom:16px">Pilih peranmu untuk melanjutkan</div>
+    <div class="tab-row">
+      <button class="tab active" id="tSiswa" onclick="switchTab('siswa')">🧒 Siswa</button>
+      <button class="tab" id="tGuru" onclick="switchTab('guru')">👨‍🏫 Guru</button>
+    </div>
+    <div id="fSiswa">
+      <div class="fgroup"><label class="flabel">Nama Lengkap</label>
+        <input class="fc" id="inNama" type="text" placeholder="Masukkan nama kamu..."></div>
+      <div class="fgroup"><label class="flabel">Kelas</label>
+        <select class="fc" id="inKelas">
+          <option value="">-- Pilih Kelas --</option>
+          <option value="1">Kelas 1 SD</option><option value="2">Kelas 2 SD</option>
+          <option value="3">Kelas 3 SD</option><option value="4">Kelas 4 SD</option>
+          <option value="5">Kelas 5 SD</option><option value="6">Kelas 6 SD</option>
+        </select></div>
+      <div class="fgroup"><label class="flabel">Sekolah (Opsional)</label>
+        <input class="fc" id="inSekolah" type="text" placeholder="Nama sekolahmu..."></div>
+      <button class="btn btn-p mt8" onclick="doLogin()">Lanjut Pilih Avatar ✨</button>
+    </div>
+    <div id="fGuru" style="display:none">
+      <div class="fgroup"><label class="flabel">Nama Guru</label>
+        <input class="fc" id="inNamaGuru" type="text" placeholder="Nama lengkap..."></div>
+      <div class="fgroup"><label class="flabel">Sekolah</label>
+        <input class="fc" id="inSekolahGuru" type="text" placeholder="SDN / MIT / MI ..."></div>
+      <button class="btn btn-g mt8" onclick="toast('🏫 Dashboard Guru segera hadir!')">Masuk Dashboard Guru</button>
+    </div>
+    <button class="btn btn-s mt8" onclick="showPage('splash')">← Kembali</button>
+  </div>
+</div>
+
+<!-- ═══════════ AVATAR ═══════════ -->
+<div class="page" id="avatar">
+  <div style="width:100%;max-width:440px;margin:auto;padding:20px 16px">
+    <div style="text-align:center;margin-bottom:4px">
+      <div style="font-size:1.8rem;margin-bottom:2px">🎭</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:1.6rem">Pilih Avatarmu!</div>
+      <div style="color:var(--txm);font-size:.8rem;margin-bottom:4px">Avatar mewakilimu dalam petualangan</div>
+    </div>
+    <div class="av-grid">
+      <div class="av-card" onclick="pickAv(this,'🔬','Petualang Sains')"><span class="av-em">🔬</span><div class="av-nm">Petualang Sains</div></div>
+      <div class="av-card" onclick="pickAv(this,'⚔️','Ksatria Angka')"><span class="av-em">⚔️</span><div class="av-nm">Ksatria Angka</div></div>
+      <div class="av-card" onclick="pickAv(this,'✏️','Penulis Cilik')"><span class="av-em">✏️</span><div class="av-nm">Penulis Cilik</div></div>
+      <div class="av-card" onclick="pickAv(this,'🛡️','Penjaga Nusantara')"><span class="av-em">🛡️</span><div class="av-nm">Penjaga Nusantara</div></div>
+      <div class="av-card" onclick="pickAv(this,'🎨','Seniman Kreatif')"><span class="av-em">🎨</span><div class="av-nm">Seniman Kreatif</div></div>
+      <div class="av-card" onclick="pickAv(this,'🌟','Bintang Cerdas')"><span class="av-em">🌟</span><div class="av-nm">Bintang Cerdas</div></div>
+    </div>
+    <button class="btn btn-p" id="avBtn" onclick="confirmAv()" disabled>Mulai Petualangan! 🚀</button>
+  </div>
+</div>
+
+<!-- ═══════════ WORLD MAP ═══════════ -->
+<div class="page has-nav" id="worldmap">
+  <div class="scroll-body">
+    <div class="topbar">
+      <div class="tb-av" id="tbAv">🌟</div>
+      <div class="tb-info">
+        <div class="tb-name" id="tbNm">Pemain</div>
+        <div class="tb-meta" id="tbMt">Kelas 1 • Level 1</div>
+      </div>
+      <div class="xpw">
+        <div class="xp-lbl"><span>XP</span><span id="xpTxt">0</span></div>
+        <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="sec-title">🗺️ Dunia Petualangan</div>
+    <div style="font-size:.8rem;color:var(--txm);margin-bottom:12px">Pilih mata pelajaran untuk belajar</div>
+    <div class="wgrid">
+      <div class="wcard w-math" onclick="enterWorld('math')">
+        <span class="wem">🏰</span>
+        <div class="wnm">Kingdom of Numbers</div>
+        <div class="wsub">Matematika</div>
+        <div class="wprog" id="wp-math">⭐ 0/5 selesai</div>
+        <div class="wbadge" id="wb-math">🎖 0</div>
+      </div>
+      <div class="wcard w-bhs" onclick="enterWorld('bahasa')">
+        <span class="wem">📚</span>
+        <div class="wnm">Magic Story Library</div>
+        <div class="wsub">Bahasa Indonesia</div>
+        <div class="wprog" id="wp-bahasa">⭐ 0/4 selesai</div>
+        <div class="wbadge" id="wb-bahasa">🎖 0</div>
+      </div>
+      <div class="wcard w-ipas" onclick="enterWorld('ipas')">
+        <span class="wem">🌱</span>
+        <div class="wnm">Science Planet</div>
+        <div class="wsub">IPAS</div>
+        <div class="wprog" id="wp-ipas">⭐ 0/4 selesai</div>
+        <div class="wbadge" id="wb-ipas">🎖 0</div>
+      </div>
+      <div class="wcard w-eng" onclick="enterWorld('english')">
+        <span class="wem">🌍</span>
+        <div class="wnm">Global City</div>
+        <div class="wsub">Bahasa Inggris</div>
+        <div class="wprog" id="wp-english">⭐ 0/3 selesai</div>
+        <div class="wbadge" id="wb-english">🎖 0</div>
+      </div>
+      <div class="wcard w-pai" onclick="enterWorld('paibp')">
+        <span class="wem">🕌</span>
+        <div class="wnm">Islamic Garden</div>
+        <div class="wsub">PAIBP</div>
+        <div class="wprog" id="wp-paibp">⭐ 0/3 selesai</div>
+        <div class="wbadge" id="wb-paibp">🎖 0</div>
+      </div>
+      <div class="wcard w-ppkn" onclick="enterWorld('ppkn')">
+        <span class="wem">🇮🇩</span>
+        <div class="wnm">City of Unity</div>
+        <div class="wsub">PPKn</div>
+        <div class="wprog" id="wp-ppkn">⭐ 0/3 selesai</div>
+        <div class="wbadge" id="wb-ppkn">🎖 0</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MAPEL ═══════════ -->
+<div class="page has-nav" id="mapel">
+  <div class="scroll-body">
+    <button class="back-btn" onclick="showPage('worldmap')">← Kembali ke Peta</button>
+    <div style="margin-bottom:14px">
+      <div id="mpEm" style="font-size:2.2rem;margin-bottom:2px">🏰</div>
+      <div id="mpTtl" style="font-family:'Fredoka One',cursive;font-size:1.5rem">Matematika</div>
+      <div id="mpSub" style="color:var(--txm);font-size:.8rem">Pilih materi yang ingin dipelajari</div>
+    </div>
+    <div class="mlist" id="mlist"></div>
+  </div>
+</div>
+
+<!-- ═══════════ BELAJAR ═══════════ -->
+<div class="page has-nav" id="belajar">
+  <div class="scroll-body">
+    <button class="back-btn" onclick="showPage('mapel')">← Pilih Materi Lain</button>
+    <div id="bContent"></div>
+    <div class="row mt16">
+      <button class="btn btn-s" onclick="showPage('mapel')">📋 Ganti Materi</button>
+      <button class="btn btn-p" onclick="startQuiz()">🎯 Mulai Kuis!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ KUIS ═══════════ -->
+<div class="page has-nav" id="kuis">
+  <div class="scroll-body">
+    <div class="qheader">
+      <div class="qprog-row">
+        <span id="qProgTxt">Soal 1 dari 5</span>
+        <span id="qScoreTxt">✅ 0 benar</span>
+      </div>
+      <div class="qbar"><div class="qfill" id="qFill" style="width:0%"></div></div>
+    </div>
+    <div id="qContent"></div>
+  </div>
+</div>
+
+<!-- ═══════════ HASIL ═══════════ -->
+<div class="page has-nav" id="hasil">
+  <div class="scroll-body">
+    <div class="res-card bounce-in">
+      <div class="res-em" id="rEm">🏆</div>
+      <div class="res-ttl" id="rTtl">Luar Biasa!</div>
+      <div id="rMsg" style="color:var(--txm);font-size:.84rem;margin-bottom:6px"></div>
+      <div class="score-big" id="rScore">100%</div>
+      <div style="font-size:.78rem;color:var(--txm)">Skor Kuis</div>
+      <div class="stats-row">
+        <div class="sbox"><div class="sval" style="color:#6EE7B7" id="sBenar">0</div><div class="slbl">✅ Benar</div></div>
+        <div class="sbox"><div class="sval" style="color:#FCA5A5" id="sSalah">0</div><div class="slbl">❌ Salah</div></div>
+        <div class="sbox"><div class="sval" style="color:#FCD34D" id="sWaktu">0s</div><div class="slbl">⏱ Waktu</div></div>
+      </div>
+      <div class="xp-pill" id="xpPill">⭐ +50 XP</div>
+      <div class="badges-row" id="bdgRow"></div>
+    </div>
+    <div class="gap-col">
+      <button class="btn btn-p" onclick="startQuiz()">🔄 Ulangi Kuis</button>
+      <button class="btn btn-g" onclick="showPage('worldmap')">🗺️ Kembali ke Peta</button>
+      <button class="btn btn-s" onclick="showPage('leaderboard')">🏆 Lihat Leaderboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ LEADERBOARD ═══════════ -->
+<div class="page has-nav" id="leaderboard">
+  <div class="scroll-body">
+    <div class="center" style="margin-bottom:14px">
+      <div style="font-size:2.2rem;margin-bottom:2px">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:1.6rem">Leaderboard</div>
+      <div style="color:var(--txm);font-size:.8rem">Top pelajar minggu ini</div>
+    </div>
+    <div style="display:flex;gap:7px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px">
+      <button class="btn btn-p btn-sm" style="white-space:nowrap;width:auto">🏫 Sekolah</button>
+      <button class="btn btn-s btn-sm" style="white-space:nowrap;width:auto" onclick="toast('Segera hadir!')">🌆 Kabupaten</button>
+      <button class="btn btn-s btn-sm" style="white-space:nowrap;width:auto" onclick="toast('Segera hadir!')">🇮🇩 Nasional</button>
+    </div>
+    <div id="lbList"></div>
+  </div>
+</div>
+
+<!-- ═══════════ PROFIL ═══════════ -->
+<div class="page has-nav" id="profile">
+  <div class="scroll-body">
+    <div class="prof-av" id="prAv">🌟</div>
+    <div class="prof-name" id="prNm">—</div>
+    <div class="prof-meta" id="prMt">—</div>
+    <div class="prof-stats">
+      <div class="pstat"><div class="pstat-v" id="prXP">0</div><div class="pstat-l">⭐ XP</div></div>
+      <div class="pstat"><div class="pstat-v" id="prLvl">1</div><div class="pstat-l">🏅 Level</div></div>
+      <div class="pstat"><div class="pstat-v" id="prBdg">0</div><div class="pstat-l">🎖 Badge</div></div>
+    </div>
+    <!-- AKUN LAIN / RESET -->
+    <div style="margin-bottom:8px">
+      <button class="btn btn-s" onclick="switchAccount()">🔄 Ganti / Tambah Akun</button>
+    </div>
+    <div class="danger-zone">
+      <div class="dz-title">⚠️ Zona Berbahaya</div>
+      <div class="dz-desc">Reset akun akan menghapus <b>semua progress, XP, dan badge</b> kamu secara permanen. Tindakan ini tidak dapat dibatalkan.</div>
+      <button class="btn btn-d btn-sm" style="width:auto" onclick="confirmReset()">🗑️ Reset Akun Ini</button>
+    </div>
+    <div style="margin-top:8px">
+      <button class="btn btn-s" onclick="showPage('worldmap')">← Kembali ke Peta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ BOTTOM NAV ═══════════ -->
+<nav id="gnav">
+  <div class="gnav-inner">
+    <button class="nb active" id="nb-worldmap" onclick="navTo('worldmap','nb-worldmap')">
+      <span class="ni">🏠</span><span>Beranda</span>
+    </button>
+    <button class="nb" id="nb-mapel" onclick="navTo('mapel','nb-mapel')">
+      <span class="ni">📝</span><span>Kuis</span>
+    </button>
+    <button class="nb" id="nb-leaderboard" onclick="navTo('leaderboard','nb-leaderboard')">
+      <span class="ni">🏆</span><span>Ranking</span>
+    </button>
+    <button class="nb" id="nb-profile" onclick="navTo('profile','nb-profile')">
+      <span class="ni">👤</span><span>Profil</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════ MODALS ═══════════ -->
+<!-- Reset Confirm -->
+<div class="modal-overlay" id="modReset">
+  <div class="modal-box">
+    <div class="modal-em">⚠️</div>
+    <div class="modal-ttl">Reset Akun?</div>
+    <div class="modal-msg">Semua progress, XP, badge, dan data belajar kamu akan <b style="color:#FCA5A5">dihapus permanen</b>.<br>Kamu yakin?</div>
+    <div class="modal-btns">
+      <button class="btn btn-d" onclick="doReset()">Ya, Hapus Semuanya</button>
+      <button class="btn btn-s" onclick="closeModal('modReset')">Batal</button>
+    </div>
+  </div>
+</div>
+<!-- Switch Account -->
+<div class="modal-overlay" id="modSwitch">
+  <div class="modal-box">
+    <div class="modal-em">🔄</div>
+    <div class="modal-ttl">Ganti Akun</div>
+    <div class="modal-msg">Progress kamu akan <b style="color:#FCD34D">tersimpan</b> di perangkat ini. Kamu bisa login dengan akun lain atau buat akun baru.</div>
+    <div class="modal-btns">
+      <button class="btn btn-p" onclick="doSwitchAccount()">Masuk Akun Lain</button>
+      <button class="btn btn-s" onclick="closeModal('modSwitch')">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toastEl"></div>
+
+<script>
+// ═══════ STARS ═══════
+(()=>{
+  const c=document.getElementById('starsCont');
+  for(let i=0;i<70;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2.2+.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${2+Math.random()*4}s;animation-delay:${Math.random()*5}s;opacity:${Math.random()*.5+.1}`;
+    c.appendChild(s);
+  }
+})();
+
+// ═══════ STORAGE HELPERS ═══════
+// Semua data disimpan di localStorage (lokal di browser/perangkat ini)
+const LS_KEY = 'eduverse_accounts';
+const LS_CUR = 'eduverse_current';
+
+function getAccounts(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){return {};}
+}
+function saveAccounts(acc){ localStorage.setItem(LS_KEY, JSON.stringify(acc)); }
+function getCurrentId(){ return localStorage.getItem(LS_CUR)||null; }
+function setCurrentId(id){ localStorage.setItem(LS_CUR, id); }
+
+function createAccount(nama,kelas,sekolah,avatar,avatarName){
+  const id = 'u_'+Date.now();
+  const acc = {
+    id, nama, kelas, sekolah, avatar, avatarName,
+    xp:0, level:1, badges:[], completedMateri:{},
+    createdAt: new Date().toISOString()
+  };
+  const all = getAccounts();
+  all[id] = acc;
+  saveAccounts(all);
+  setCurrentId(id);
+  return acc;
+}
+
+function getCurrentAccount(){
+  const id = getCurrentId();
+  if(!id) return null;
+  const all = getAccounts();
+  return all[id]||null;
+}
+
+function saveCurrentAccount(acc){
+  const all = getAccounts();
+  all[acc.id] = acc;
+  saveAccounts(all);
+}
+
+// ═══════ STATE ═══════
+let ST = {
+  acc: null,         // current account object
+  currentWorld: '',
+  currentMateriIdx: -1,
+  currentMateri: null,
+  qqs: [], qIdx: 0, qScore: 0, qStart: 0, qAnswered: false
+};
+
+// ═══════ NAV ═══════
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('gnav').style.display =
+    ['splash','login','avatar'].includes(id)?'none':'flex';
+  // scroll top
+  const sb = document.querySelector('#'+id+' .scroll-body');
+  if(sb) sb.scrollTop=0;
+}
+
+function showNav(){ document.getElementById('gnav').style.display='flex'; }
+
+function navTo(page, navId){
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById(navId).classList.add('active');
+  showPage(page);
+}
+
+// ═══════ SPLASH LOGIC ═══════
+function handleSplashMain(){
+  // Jika sudah ada akun aktif, langsung ke peta
+  const acc = getCurrentAccount();
+  if(acc){
+    ST.acc = acc;
+    updateTopBar();
+    buildLeaderboard();
+    buildProfile();
+    updateWorldProgress();
+    showPage('worldmap');
+    showNav();
+  } else {
+    showPage('login');
+  }
+}
+
+// Cek saat load apakah ada akun
+window.addEventListener('load',()=>{
+  const acc = getCurrentAccount();
+  if(acc){
+    document.getElementById('splashMainBtn').textContent = '▶️ Lanjutkan sebagai '+acc.nama;
+  }
+});
+
+// ═══════ LOGIN ═══════
+function switchTab(t){
+  document.getElementById('fSiswa').style.display=t==='siswa'?'block':'none';
+  document.getElementById('fGuru').style.display=t==='guru'?'block':'none';
+  document.getElementById('tSiswa').className='tab'+(t==='siswa'?' active':'');
+  document.getElementById('tGuru').className='tab'+(t==='guru'?' active':'');
+}
+
+function doLogin(){
+  const nama=document.getElementById('inNama').value.trim();
+  const kelas=document.getElementById('inKelas').value;
+  if(!nama){toast('⚠️ Masukkan nama kamu dulu!');return;}
+  if(!kelas){toast('⚠️ Pilih kelas kamu dulu!');return;}
+  ST._loginData={nama,kelas,sekolah:document.getElementById('inSekolah').value||'SD Nusantara'};
+  showPage('avatar');
+}
+
+// ═══════ AVATAR ═══════
+let _selAvEl=null;
+function pickAv(el,em,nm){
+  if(_selAvEl) _selAvEl.classList.remove('sel');
+  el.classList.add('sel');_selAvEl=el;
+  ST._avatar=em;ST._avatarName=nm;
+  document.getElementById('avBtn').disabled=false;
+}
+
+function confirmAv(){
+  if(!ST._avatar){toast('Pilih avatar dulu!');return;}
+  const d=ST._loginData;
+  ST.acc = createAccount(d.nama,d.kelas,d.sekolah,ST._avatar,ST._avatarName);
+  updateTopBar();buildLeaderboard();buildProfile();updateWorldProgress();
+  showPage('worldmap');showNav();
+}
+
+// ═══════ TOP BAR ═══════
+function updateTopBar(){
+  const a=ST.acc; if(!a) return;
+  document.getElementById('tbAv').textContent=a.avatar;
+  document.getElementById('tbNm').textContent=a.nama;
+  document.getElementById('tbMt').textContent=`Kelas ${a.kelas} • Level ${a.level}`;
+  const pct=(a.xp%(a.level*100))/(a.level*100)*100;
+  document.getElementById('xpFill').style.width=pct+'%';
+  document.getElementById('xpTxt').textContent=a.xp+' XP';
+}
+
+function addXP(n){
+  const a=ST.acc;
+  a.xp+=n;
+  if(a.xp>=a.level*100){ a.level++; toast('🎊 Level Up! Sekarang Level '+a.level+'!'); }
+  saveCurrentAccount(a);
+  updateTopBar();
+}
+
+// ═══════ PROFILE ═══════
+function buildProfile(){
+  const a=ST.acc; if(!a) return;
+  document.getElementById('prAv').textContent=a.avatar;
+  document.getElementById('prNm').textContent=a.nama;
+  document.getElementById('prMt').textContent=`Kelas ${a.kelas} SD • ${a.sekolah}`;
+  document.getElementById('prXP').textContent=a.xp;
+  document.getElementById('prLvl').textContent=a.level;
+  document.getElementById('prBdg').textContent=a.badges.length;
+}
+
+// ═══════ WORLD PROGRESS ═══════
+function updateWorldProgress(){
+  const a=ST.acc; if(!a) return;
+  const wkeys=['math','bahasa','ipas','english','paibp','ppkn'];
+  wkeys.forEach(wk=>{
+    const w=WORLDS[wk];
+    const total=w.materi.length;
+    let done=0,bdg=0;
+    w.materi.forEach((_,i)=>{
+      const k=wk+'_'+i;
+      if(a.completedMateri[k]) done++;
+      if(a.completedMateri[k] && a.completedMateri[k].badge) bdg++;
+    });
+    const pe=document.getElementById('wp-'+wk);
+    const be=document.getElementById('wb-'+wk);
+    if(pe) pe.textContent=`⭐ ${done}/${total} selesai`;
+    if(be) be.textContent=`🎖 ${bdg}`;
+  });
+}
+
+// ═══════ SWITCH / RESET ACCOUNT ═══════
+function switchAccount(){ document.getElementById('modSwitch').classList.add('show'); }
+function doSwitchAccount(){
+  closeModal('modSwitch');
+  // Simpan akun saat ini, buka halaman login untuk akun baru
+  setCurrentId(''); // hapus sesi aktif, bukan data
+  // Reset form
+  document.getElementById('inNama').value='';
+  document.getElementById('inKelas').value='';
+  document.getElementById('inSekolah').value='';
+  _selAvEl=null; ST._avatar=''; ST._avatarName='';
+  document.getElementById('avBtn').disabled=true;
+  showPage('login');
+  document.getElementById('gnav').style.display='none';
+}
+
+function confirmReset(){ document.getElementById('modReset').classList.add('show'); }
+function doReset(){
+  closeModal('modReset');
+  const id=ST.acc?ST.acc.id:null;
+  if(id){
+    const all=getAccounts();
+    delete all[id];
+    saveAccounts(all);
+    setCurrentId('');
+  }
+  ST.acc=null;
+  document.getElementById('splashMainBtn').textContent='🚀 Mulai Petualangan';
+  showPage('splash');
+  document.getElementById('gnav').style.display='none';
+  toast('✅ Akun berhasil direset!');
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+// ═══════ TOAST ═══════
+function toast(msg){
+  const el=document.getElementById('toastEl');
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2500);
+}
+
+// ═══════ LEADERBOARD ═══════
+const LB_DEMO=[
+  {avatar:'⚔️',nama:'Ahmad Rizky',sekolah:'SDN 1 Jakarta',xp:1850},
+  {avatar:'🔬',nama:'Siti Nuraini',sekolah:'MI Nurul Huda',xp:1720},
+  {avatar:'🌟',nama:'Budi Santoso',sekolah:'SD Muhammadiyah',xp:1650},
+  {avatar:'🎨',nama:'Dewi Rahayu',sekolah:'SDN 4 Bandung',xp:1580},
+  {avatar:'🛡️',nama:'Fajar Pratama',sekolah:'SDN 2 Surabaya',xp:1490},
+  {avatar:'✏️',nama:'Nurul Izza',sekolah:'SD Islam Terpadu',xp:1320},
+];
+
+function buildLeaderboard(){
+  const a=ST.acc;
+  const all=[...LB_DEMO];
+  if(a) all.push({avatar:a.avatar,nama:a.nama,sekolah:a.sekolah,xp:a.xp,isMe:true});
+  all.sort((a,b)=>b.xp-a.xp);
+  const rEm=['🥇','🥈','🥉'];
+  document.getElementById('lbList').innerHTML=all.map((d,i)=>`
+    <div class="lb-item${d.isMe?' me':''}">
+      <div class="lb-rank">${i<3?rEm[i]:i+1}</div>
+      <div class="lb-av">${d.avatar}</div>
+      <div class="lb-inf">
+        <div class="lb-nm">${d.nama}${d.isMe?' <span style="font-size:.65rem;background:rgba(108,61,211,.2);border-radius:50px;padding:2px 7px;color:#C4B5FD">Kamu</span>':''}</div>
+        <div class="lb-sch">${d.sekolah}</div>
+      </div>
+      <div class="lb-xp">⭐ ${d.xp}</div>
+    </div>`).join('');
+}
+
+// ═══════ WORLDS DATA ═══════
+const WORLDS={
+  math:{emoji:'🏰',title:'Kingdom of Numbers',sub:'Matematika',
+    materi:[
+      {icon:'🔢',name:'Bilangan Cacah',desc:'Mengenal bilangan 1–100',level:'Mudah',
+        tujuan:'Siswa dapat mengenal, membaca, dan menulis bilangan cacah 1–100',
+        isi:`<h3>📌 Apa itu Bilangan Cacah?</h3>Bilangan cacah adalah bilangan yang dimulai dari <b>0, 1, 2, 3 ...</b> dan seterusnya. Tidak ada koma atau pecahan.
+<div class="hl">"Bilangan cacah = bilangan bulat yang dimulai dari nol"</div>
+<h3>🔢 Nilai Tempat</h3>Setiap angka punya nilai tempat:<br>• Angka di tempat <b>satuan</b> → nilainya 1–9<br>• Angka di tempat <b>puluhan</b> → nilainya 10–90<br>• Angka di tempat <b>ratusan</b> → nilainya 100–900
+<div class="exbox"><strong>✏️ Contoh:</strong> Angka <b>47</b><br>→ 4 ada di puluhan (nilainya 40)<br>→ 7 ada di satuan (nilainya 7)<br>→ Dibaca: <i>"empat puluh tujuh"</i></div>`,
+        quiz:[
+          {type:'pilgan',soal:'Berapa nilai tempat angka 3 pada bilangan 35?',opsi:['Satuan','Puluhan','Ratusan','Ribuan'],jwb:1,hint:'Hitung dari kanan: satuan, puluhan, ratusan...'},
+          {type:'pilgan',soal:'Bilangan mana yang lebih besar: 47 atau 74?',opsi:['47','74','Sama besar','Tidak bisa dibandingkan'],jwb:1,hint:'Bandingkan angka puluhan terlebih dahulu!'},
+          {type:'pilgan',soal:'Lambang bilangan dari "delapan puluh sembilan" adalah...',opsi:['98','89','88','98'],jwb:1,hint:'Delapan puluh = 80, tambah sembilan = 9'},
+          {type:'bs',soal:'Bilangan 0 (nol) termasuk bilangan cacah.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Bilangan cacah dimulai dari 0!'},
+          {type:'pilgan',soal:'Urutan bilangan dari kecil ke besar yang benar adalah...',opsi:['15,14,13,16','13,14,15,16','16,13,15,14','14,16,13,15'],jwb:1,hint:'Dari kecil ke besar artinya naik satu per satu'},
+        ]},
+      {icon:'➕',name:'Penjumlahan & Pengurangan',desc:'Operasi hitung dasar',level:'Mudah',
+        tujuan:'Siswa dapat melakukan penjumlahan dan pengurangan bilangan',
+        isi:`<h3>➕ Penjumlahan</h3>Penjumlahan artinya <b>menggabungkan</b> dua bilangan.
+<div class="exbox"><strong>✏️ Contoh:</strong> 23 + 15 = ?<br>→ Satuan: 3+5 = 8<br>→ Puluhan: 2+1 = 3<br>→ Hasil: <b>38</b></div>
+<h3>➖ Pengurangan</h3>Pengurangan artinya <b>mengurangi</b> suatu bilangan.
+<div class="exbox"><strong>✏️ Contoh:</strong> 50 − 17 = <b>33</b></div>
+<div class="hl">"Sifat komutatif: 3 + 5 = 5 + 3 = 8 ✅"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'34 + 25 = ?',opsi:['58','59','60','57'],jwb:1,hint:'Satuan: 4+5=9, Puluhan: 3+2=5 → 59'},
+          {type:'pilgan',soal:'80 − 36 = ?',opsi:['43','44','45','46'],jwb:1,hint:'80-36: pinjam dari puluhan jika perlu'},
+          {type:'bs',soal:'15 + 23 = 23 + 15 (sifat komutatif)',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Urutan penjumlahan tidak mengubah hasil'},
+          {type:'pilgan',soal:'Ibu membeli 45 apel, 28 dimakan. Sisa apel...',opsi:['17','18','17 buah','15 buah'],jwb:0,hint:'45 - 28 = ?'},
+          {type:'pilgan',soal:'Berapa hasil 67 + 0?',opsi:['0','67','167','607'],jwb:1,hint:'Bilangan + 0 = bilangan itu sendiri'},
+        ]},
+      {icon:'✖️',name:'Perkalian & Pembagian',desc:'Tabel perkalian 1–10',level:'Sedang',
+        tujuan:'Siswa hafal tabel perkalian 1–10 dan memahami pembagian',
+        isi:`<h3>✖️ Perkalian</h3>Perkalian adalah <b>penjumlahan berulang</b>!
+<div class="exbox"><strong>✏️ Contoh:</strong><br>4 × 3 = 4+4+4 = <b>12</b><br>Artinya: 4 diambil sebanyak 3 kali</div>
+<h3>➗ Pembagian</h3>Pembagian adalah <b>kebalikan perkalian</b>.
+<div class="exbox"><strong>✏️ Contoh:</strong><br>12 ÷ 4 = 3<br>Artinya: 12 dibagi 4 kelompok = 3 per kelompok</div>
+<div class="hl">"Perkalian dan pembagian saling berlawanan (invers)"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'7 × 8 = ?',opsi:['54','56','58','52'],jwb:1,hint:'7×8: ingat tabel perkalian 7'},
+          {type:'pilgan',soal:'45 ÷ 9 = ?',opsi:['4','5','6','7'],jwb:1,hint:'Berapa × 9 = 45?'},
+          {type:'pilgan',soal:'Jika 6 × ? = 54, maka ? = ...',opsi:['7','8','9','10'],jwb:2,hint:'54 ÷ 6 = ?'},
+          {type:'bs',soal:'4 × 7 = 7 × 4 (sifat komutatif perkalian)',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'a × b = b × a'},
+          {type:'pilgan',soal:'24 permen dibagi rata ke 6 anak. Tiap anak dapat...',opsi:['3 permen','4 permen','5 permen','6 permen'],jwb:1,hint:'24 ÷ 6 = ?'},
+        ]},
+      {icon:'🍕',name:'Pecahan Sederhana',desc:'Setengah, seperempat, dll',level:'Sedang',
+        tujuan:'Siswa memahami konsep pecahan sederhana',
+        isi:`<h3>🍕 Apa itu Pecahan?</h3>Pecahan menunjukkan <b>bagian dari keseluruhan</b>. Format: <b>pembilang / penyebut</b>
+<div class="exbox"><strong>🍕 Contoh:</strong><br>Pizza dipotong 4 sama besar, kamu ambil 1 = <b>1/4</b><br>Pembilang: 1 (yang diambil)<br>Penyebut: 4 (total bagian)</div>
+<h3>🔑 Pecahan Senilai</h3>
+<div class="hl">1/2 = 2/4 = 4/8 → Nilainya sama!</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Pizza dipotong 8, Budi makan 3 potong. Bagian Budi = ...',opsi:['3/8','8/3','3/5','5/8'],jwb:0,hint:'Pembilang = yang diambil, Penyebut = total bagian'},
+          {type:'pilgan',soal:'Pecahan yang paling besar adalah...',opsi:['1/4','1/2','1/8','1/3'],jwb:1,hint:'Makin kecil penyebut, makin besar nilainya'},
+          {type:'bs',soal:'1/2 = 2/4 (pecahan senilai)',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'1/2 × 2/2 = 2/4'},
+          {type:'pilgan',soal:'Setengah dari 20 adalah...',opsi:['5','10','15','20'],jwb:1,hint:'1/2 × 20 = ?'},
+          {type:'pilgan',soal:'3/6 dalam bentuk sederhana adalah...',opsi:['1/2','2/3','1/3','3/6'],jwb:0,hint:'Bagi pembilang dan penyebut dengan 3'},
+        ]},
+      {icon:'📐',name:'Bangun Datar',desc:'Segitiga, persegi, lingkaran',level:'Mudah',
+        tujuan:'Siswa mengenal berbagai bangun datar dan sifat-sifatnya',
+        isi:`<h3>📐 Mengenal Bangun Datar</h3>Bangun datar adalah bentuk 2 dimensi dengan panjang dan lebar.
+<div class="exbox"><b>Jenis-jenis:</b><br>🔶 <b>Segitiga</b> → 3 sisi, 3 sudut<br>🔷 <b>Persegi</b> → 4 sisi sama, 4 sudut siku-siku<br>▭ <b>Persegi Panjang</b> → 2 pasang sisi sama<br>⭕ <b>Lingkaran</b> → tidak punya sisi/sudut</div>
+<div class="hl">"Keliling = jumlah semua sisi | Luas = p × l"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Bangun datar yang punya 3 sisi adalah...',opsi:['Persegi','Persegi panjang','Segitiga','Lingkaran'],jwb:2,hint:'Tri = tiga, segitiga punya 3 sisi'},
+          {type:'pilgan',soal:'Keliling persegi dengan sisi 5 cm adalah...',opsi:['20 cm','25 cm','10 cm','15 cm'],jwb:0,hint:'K persegi = 4 × sisi'},
+          {type:'bs',soal:'Lingkaran tidak memiliki sudut.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Lingkaran adalah kurva tertutup tanpa sudut lurus'},
+          {type:'pilgan',soal:'Luas persegi panjang p=8, l=4 adalah...',opsi:['32','24','12','28'],jwb:0,hint:'L = p × l = 8 × 4'},
+          {type:'pilgan',soal:'4 sisi sama panjang + 4 sudut siku-siku = ...',opsi:['Persegi panjang','Segitiga','Persegi','Jajar genjang'],jwb:2,hint:'Persegi: semua sisi sama + semua sudut 90°'},
+        ]},
+    ]},
+  bahasa:{emoji:'📚',title:'Magic Story Library',sub:'Bahasa Indonesia',
+    materi:[
+      {icon:'🔤',name:'Huruf & Kata',desc:'Alfabet dan kata dasar',level:'Mudah',
+        tujuan:'Siswa mengenal 26 huruf alfabet dan dapat menyusun kata',
+        isi:`<h3>🔤 Alfabet Indonesia</h3>Bahasa Indonesia memakai 26 huruf: <b>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</b>
+<div class="exbox"><b>Huruf Vokal:</b> A, I, U, E, O<br><b>Huruf Konsonan:</b> B, C, D, F, G, H, J, K, L, M, N, P, Q, R, S, T, V, W, X, Y, Z</div>
+<div class="hl">"B-U-K-U = BUKU artinya buku untuk membaca"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Huruf vokal yang benar adalah...',opsi:['A,B,C,D,E','A,I,U,E,O','A,E,I,O,U,K','B,C,D,F,G'],jwb:1,hint:'Huruf vokal hanya ada 5: A, I, U, E, O'},
+          {type:'bs',soal:'Huruf "B" adalah huruf vokal.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Vokal: A, I, U, E, O — B adalah konsonan'},
+          {type:'pilgan',soal:'Kata "MEJA" terdiri dari berapa huruf?',opsi:['3','4','5','6'],jwb:1,hint:'M-E-J-A, hitung!'},
+          {type:'pilgan',soal:'Huruf pertama dari kata "sekolah" adalah...',opsi:['E','K','S','A'],jwb:2,hint:'S-E-K-O-L-A-H'},
+          {type:'bs',soal:'Alfabet Indonesia terdiri dari 26 huruf.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'A sampai Z = 26 huruf'},
+        ]},
+      {icon:'📖',name:'Membaca Kalimat',desc:'Kalimat dan tanda baca',level:'Mudah',
+        tujuan:'Siswa dapat membaca dan memahami kalimat sederhana',
+        isi:`<h3>📖 Kalimat</h3>Kalimat adalah rangkaian kata yang mengandung makna lengkap dan diakhiri tanda baca.
+<div class="exbox"><b>Contoh kalimat:</b><br>• "Adik makan nasi." → kalimat pernyataan (diakhiri titik)<br>• "Siapa namamu?" → kalimat tanya (diakhiri tanda tanya)<br>• "Tolong ambilkan buku!" → kalimat perintah (diakhiri tanda seru)</div>
+<div class="hl">"Setiap kalimat diawali huruf kapital dan diakhiri tanda baca"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Tanda baca yang dipakai untuk kalimat tanya adalah...',opsi:['.','!','?',','],jwb:2,hint:'Kalimat tanya menggunakan tanda...?'},
+          {type:'bs',soal:'Setiap kalimat harus diawali dengan huruf kapital.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Aturan penulisan kalimat yang benar'},
+          {type:'pilgan',soal:'"Siapa namamu___" diakhiri tanda...',opsi:['Titik','Tanda tanya','Tanda seru','Koma'],jwb:1,hint:'Kalimat yang menanyakan sesuatu = kalimat tanya'},
+          {type:'pilgan',soal:'Kalimat yang mengungkapkan perintah diakhiri...',opsi:['?','.',',','!'],jwb:3,hint:'Perintah menggunakan tanda seru!'},
+          {type:'bs',soal:'"budi pergi ke sekolah." adalah kalimat yang benar.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Kalimat harus diawali huruf kapital: "Budi pergi ke sekolah."'},
+        ]},
+      {icon:'📝',name:'Menulis Narasi',desc:'Menceritakan pengalaman',level:'Sedang',
+        tujuan:'Siswa dapat menulis narasi sederhana tentang pengalaman',
+        isi:`<h3>📝 Teks Narasi</h3>Teks narasi adalah teks yang <b>menceritakan suatu peristiwa</b> secara berurutan.
+<div class="exbox"><b>Struktur Narasi:</b><br>1. <b>Orientasi</b> → Perkenalan tokoh & latar<br>2. <b>Komplikasi</b> → Masalah/kejadian<br>3. <b>Resolusi</b> → Penyelesaian masalah</div>
+<div class="hl">"Narasi menjawab pertanyaan: Siapa? Di mana? Kapan? Apa yang terjadi?"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Teks narasi bertujuan untuk...',opsi:['Menjelaskan cara membuat sesuatu','Menceritakan suatu peristiwa','Mendeskripsikan suatu objek','Meyakinkan pembaca'],jwb:1,hint:'Narasi = bercerita tentang kejadian'},
+          {type:'pilgan',soal:'Bagian awal teks narasi yang memperkenalkan tokoh disebut...',opsi:['Komplikasi','Resolusi','Orientasi','Klimaks'],jwb:2,hint:'Bagian pembuka narasi = orientasi'},
+          {type:'bs',soal:'Teks narasi harus menggunakan kata penghubung waktu seperti "kemudian", "lalu", "setelah itu".',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Kata hubung waktu membuat cerita mengalir berurutan'},
+          {type:'pilgan',soal:'Penyelesaian masalah dalam narasi disebut...',opsi:['Orientasi','Komplikasi','Klimaks','Resolusi'],jwb:3,hint:'Resolusi = solusi/penyelesaian'},
+          {type:'bs',soal:'Narasi hanya bisa ditulis dari sudut pandang orang pertama (menggunakan "aku").',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Narasi bisa ditulis dari sudut pandang orang pertama MAUPUN ketiga'},
+        ]},
+      {icon:'🗣️',name:'Puisi',desc:'Memahami dan membuat puisi',level:'Sulit',
+        tujuan:'Siswa memahami ciri-ciri puisi dan dapat membuat puisi sederhana',
+        isi:`<h3>🌸 Apa itu Puisi?</h3>Puisi adalah karya sastra yang menggunakan <b>bahasa indah</b> dengan pilihan kata yang cermat dan biasanya memiliki rima.
+<div class="exbox"><b>Ciri-ciri Puisi:</b><br>• Menggunakan <b>diksi</b> (pilihan kata) yang indah<br>• Memiliki <b>rima</b> (persamaan bunyi)<br>• Disusun dalam <b>baris dan bait</b><br>• Menggunakan <b>majas/gaya bahasa</b></div>
+<div class="hl">"Rima: persamaan bunyi di akhir baris, contoh: pagi-lagi-pergi (a-a-a)"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Satuan terkecil dalam puisi yang terdiri dari beberapa baris disebut...',opsi:['Paragraf','Bait','Baris','Kalimat'],jwb:1,hint:'Seperti paragraf dalam prosa, dalam puisi namanya bait'},
+          {type:'bs',soal:'Puisi selalu harus memiliki rima.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Puisi modern/bebas tidak wajib memiliki rima'},
+          {type:'pilgan',soal:'Persamaan bunyi di akhir baris puisi disebut...',opsi:['Diksi','Majas','Rima','Bait'],jwb:2,hint:'Rima = persamaan bunyi akhir baris'},
+          {type:'pilgan',soal:'"Bulan bersinar terang / Menerangi malam yang panjang" — rima akhirnya adalah...',opsi:['a-b','a-a','a-b-a-b','a-a-b-b'],jwb:1,hint:'"terang" dan "panjang" — bunyi akhirnya sama: -ang'},
+          {type:'bs',soal:'Diksi adalah pilihan kata yang digunakan dalam puisi.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Diksi berasal dari bahasa Latin "diction" = pilihan kata'},
+        ]},
+    ]},
+  ipas:{emoji:'🌱',title:'Science Planet',sub:'IPAS',
+    materi:[
+      {icon:'🌿',name:'Makhluk Hidup',desc:'Ciri-ciri makhluk hidup',level:'Mudah',
+        tujuan:'Siswa memahami ciri-ciri makhluk hidup',
+        isi:`<h3>🌿 Ciri Makhluk Hidup</h3>Makhluk hidup adalah semua benda yang memiliki kehidupan seperti manusia, hewan, dan tumbuhan.
+<div class="exbox"><b>7 Ciri Makhluk Hidup:</b><br>1. 🍚 Membutuhkan makanan<br>2. 💨 Bernapas<br>3. 🏃 Bergerak<br>4. 📈 Tumbuh & berkembang<br>5. 🔄 Berkembang biak<br>6. 🌡️ Peka terhadap rangsangan<br>7. 🚽 Mengeluarkan zat sisa</div>
+<div class="hl">"Semua makhluk hidup pasti memiliki 7 ciri di atas!"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Berapa jumlah ciri-ciri makhluk hidup?',opsi:['5','6','7','8'],jwb:2,hint:'Ada 7 ciri makhluk hidup'},
+          {type:'bs',soal:'Batu termasuk makhluk hidup karena dapat bergerak.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Batu tidak memenuhi ciri makhluk hidup lainnya'},
+          {type:'pilgan',soal:'Proses makhluk hidup mengeluarkan gas CO₂ adalah...',opsi:['Fotosintesis','Bernapas','Bergerak','Berkembang biak'],jwb:1,hint:'Saat bernapas, kita menghirup O₂ dan mengeluarkan CO₂'},
+          {type:'pilgan',soal:'Tumbuhan berkembang biak dengan cara...',opsi:['Bertelur','Biji dan stek','Beranak','Membelah diri'],jwb:1,hint:'Tumbuhan bisa berkembang biak dengan biji, stek, cangkok'},
+          {type:'bs',soal:'Tumbuhan adalah makhluk hidup.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Tumbuhan memenuhi semua 7 ciri makhluk hidup'},
+        ]},
+      {icon:'⚡',name:'Energi',desc:'Sumber dan bentuk energi',level:'Sedang',
+        tujuan:'Siswa memahami sumber dan bentuk-bentuk energi',
+        isi:`<h3>⚡ Apa itu Energi?</h3>Energi adalah kemampuan untuk melakukan usaha atau kerja.
+<div class="exbox"><b>Bentuk-bentuk Energi:</b><br>☀️ Energi cahaya (matahari)<br>🔥 Energi panas/kalor<br>⚡ Energi listrik<br>🎵 Energi bunyi<br>🏃 Energi gerak/kinetik<br>🍎 Energi kimia (makanan)</div>
+<div class="hl">"Energi dapat berubah bentuk (konversi energi):<br>Energi listrik → energi cahaya (lampu)"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Sumber energi utama kehidupan di Bumi adalah...',opsi:['Angin','Matahari','Air','Api'],jwb:1,hint:'Matahari memberikan cahaya dan panas untuk semua kehidupan'},
+          {type:'pilgan',soal:'Setrika mengubah energi listrik menjadi energi...',opsi:['Cahaya','Bunyi','Panas','Gerak'],jwb:2,hint:'Setrika menghasilkan panas untuk meluruskan pakaian'},
+          {type:'bs',soal:'Energi tidak dapat diubah dari satu bentuk ke bentuk lain.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Energi bisa diubah: listrik → cahaya, kimia → gerak, dll'},
+          {type:'pilgan',soal:'Energi yang tersimpan dalam makanan adalah energi...',opsi:['Kinetik','Listrik','Kimia','Cahaya'],jwb:2,hint:'Makanan mengandung energi kimia yang dilepas saat dicerna'},
+          {type:'pilgan',soal:'Kincir angin mengubah energi angin (gerak) menjadi energi...',opsi:['Panas','Listrik','Cahaya','Bunyi'],jwb:1,hint:'PLTA = Pembangkit Listrik Tenaga Angin'},
+        ]},
+      {icon:'🌍',name:'Tata Surya',desc:'Planet dan benda langit',level:'Sedang',
+        tujuan:'Siswa memahami susunan tata surya dan nama-nama planet',
+        isi:`<h3>☀️ Tata Surya Kita</h3>Tata surya = Matahari + semua benda langit yang mengitarinya.
+<div class="exbox"><b>8 Planet (urutan dari Matahari):</b><br>1. Merkurius ← paling dekat<br>2. Venus<br>3. Bumi ← kita di sini!<br>4. Mars<br>5. Jupiter ← paling besar<br>6. Saturnus ← bercincin<br>7. Uranus<br>8. Neptunus ← paling jauh</div>
+<div class="hl">"Planet bergerak mengelilingi Matahari dalam orbit berbentuk elips"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Planet yang paling dekat dengan Matahari adalah...',opsi:['Venus','Bumi','Merkurius','Mars'],jwb:2,hint:'Urutan: Merkurius, Venus, Bumi, Mars...'},
+          {type:'pilgan',soal:'Planet manakah yang paling besar?',opsi:['Saturnus','Jupiter','Bumi','Neptunus'],jwb:1,hint:'Planet terbesar berdiameter ~142.000 km'},
+          {type:'bs',soal:'Bumi adalah planet ketiga dari Matahari.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Merkurius ke-1, Venus ke-2, Bumi ke-3'},
+          {type:'pilgan',soal:'Planet yang terkenal karena cincinnya adalah...',opsi:['Jupiter','Mars','Saturnus','Uranus'],jwb:2,hint:'Planet bercincin indah berwarna kuning kecoklatan'},
+          {type:'pilgan',soal:'Berapa jumlah planet dalam tata surya?',opsi:['7','8','9','10'],jwb:1,hint:'Pluto tidak lagi diklasifikasikan planet sejak 2006'},
+        ]},
+      {icon:'🌳',name:'Ekosistem',desc:'Rantai makanan & lingkungan',level:'Sulit',
+        tujuan:'Siswa memahami ekosistem dan rantai makanan',
+        isi:`<h3>🌳 Ekosistem</h3>Ekosistem adalah hubungan antara <b>makhluk hidup</b> dengan <b>lingkungannya</b>.
+<div class="exbox"><b>Komponen Ekosistem:</b><br>🌿 <b>Produsen</b> → tumbuhan (bisa buat makanan sendiri)<br>🐛 <b>Konsumen</b> → hewan (makan makhluk lain)<br>🍄 <b>Pengurai</b> → jamur/bakteri (mengurai sisa makhluk hidup)</div>
+<div class="hl">"Contoh rantai makanan:<br>Rumput → Belalang → Katak → Ular → Elang"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Organisme yang dapat membuat makanan sendiri disebut...',opsi:['Konsumen','Produsen','Pengurai','Predator'],jwb:1,hint:'Produsen = tumbuhan yang bisa berfotosintesis'},
+          {type:'bs',soal:'Hewan adalah produsen dalam ekosistem.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Hewan adalah konsumen, bukan produsen'},
+          {type:'pilgan',soal:'Dalam rantai makanan: Rumput→Kelinci→Rubah, rubah berperan sebagai...',opsi:['Produsen','Konsumen tingkat 1','Konsumen tingkat 2','Pengurai'],jwb:2,hint:'Kelinci makan rumput (K1), Rubah makan kelinci (K2)'},
+          {type:'pilgan',soal:'Jamur dan bakteri berperan sebagai... dalam ekosistem.',opsi:['Produsen','Konsumen','Pengurai','Predator'],jwb:2,hint:'Mereka mengurai sisa-sisa makhluk hidup yang mati'},
+          {type:'bs',soal:'Jika semua elang punah, populasi ular akan meningkat.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Rantai makanan: Elang memangsa ular, tanpa elang ular tidak terkontrol'},
+        ]},
+    ]},
+  english:{emoji:'🌍',title:'Global City',sub:'Bahasa Inggris',
+    materi:[
+      {icon:'👋',name:'Greetings',desc:'Hello, Good Morning, dst.',level:'Mudah',
+        tujuan:'Students can use English greetings in daily conversation',
+        isi:`<h3>👋 Basic Greetings</h3>Greetings = cara menyapa orang lain!
+<div class="exbox"><b>Morning/Afternoon/Evening:</b><br>🌅 Good morning! (Selamat pagi!)<br>☀️ Good afternoon! (Selamat siang!)<br>🌙 Good evening! (Selamat malam!)<br>😴 Good night! (Selamat tidur!)</div>
+<div class="exbox"><b>Basic Phrases:</b><br>👋 Hello! / Hi!<br>😊 How are you? → I'm fine, thank you!<br>👋 Goodbye! / Bye bye! / See you!</div>
+<div class="hl">"Pertemuan: Hello! How are you? → Jawab: I'm fine, thank you! And you?"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'"Selamat pagi" dalam Bahasa Inggris adalah...',opsi:['Good night','Good afternoon','Good morning','Good evening'],jwb:2,hint:'Morning = pagi hari'},
+          {type:'pilgan',soal:'Cara menjawab "How are you?" yang benar...',opsi:['Good morning!','I\'m fine, thank you!','Goodbye!','See you!'],jwb:1,hint:'How are you = Apa kabar?'},
+          {type:'bs',soal:'"Good night" digunakan saat pagi hari.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Good night = malam hari / saat mau tidur'},
+          {type:'pilgan',soal:'Cara berpamitan dalam Bahasa Inggris adalah...',opsi:['Hello!','Good morning!','Goodbye!','How are you?'],jwb:2,hint:'Pamitan = berpisah'},
+          {type:'pilgan',soal:'"Hi!" artinya...',opsi:['Selamat tinggal','Apa kabar','Halo/Hai','Terima kasih'],jwb:2,hint:'Hi = sapaan informal seperti "Hai"'},
+        ]},
+      {icon:'👨‍👩‍👧',name:'Family',desc:'Father, Mother, Brother, Sister',level:'Mudah',
+        tujuan:'Students can name family members in English',
+        isi:`<h3>👨‍👩‍👧 My Family</h3>Anggota keluarga dalam Bahasa Inggris:
+<div class="exbox">👨 <b>Father</b> = Ayah<br>👩 <b>Mother</b> = Ibu<br>👦 <b>Brother</b> = Kakak/Adik laki-laki<br>👧 <b>Sister</b> = Kakak/Adik perempuan<br>👴 <b>Grandfather</b> = Kakek<br>👵 <b>Grandmother</b> = Nenek</div>
+<div class="hl">"My name is Budi. I have a father, a mother, and a sister."</div>`,
+        quiz:[
+          {type:'pilgan',soal:'"Ayah" dalam Bahasa Inggris adalah...',opsi:['Mother','Brother','Father','Sister'],jwb:2,hint:'Father = ayah, Mother = ibu'},
+          {type:'pilgan',soal:'"Sister" artinya...',opsi:['Kakak laki-laki','Adik laki-laki','Kakak/Adik perempuan','Ibu'],jwb:2,hint:'Sister = perempuan, Brother = laki-laki'},
+          {type:'bs',soal:'"Grandfather" artinya nenek.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Grandfather = kakek, Grandmother = nenek'},
+          {type:'pilgan',soal:'Melengkapi: "I have a father and a ___." (ibu)',opsi:['Brother','Sister','Mother','Grandfather'],jwb:2,hint:'Mother = ibu'},
+          {type:'pilgan',soal:'Lawan kata dari "brother" adalah...',opsi:['Father','Mother','Grandfather','Sister'],jwb:3,hint:'Brother=laki-laki, Sister=perempuan — keduanya saudara'},
+        ]},
+      {icon:'🐶',name:'Animals',desc:'Nama hewan dalam Inggris',level:'Mudah',
+        tujuan:'Students can name common animals in English',
+        isi:`<h3>🐾 Animals Around Us</h3>Nama hewan dalam Bahasa Inggris:
+<div class="exbox">🐶 Dog = Anjing | 🐱 Cat = Kucing<br>🐮 Cow = Sapi | 🐔 Chicken = Ayam<br>🐟 Fish = Ikan | 🐦 Bird = Burung<br>🐘 Elephant = Gajah | 🦁 Lion = Singa<br>🐸 Frog = Katak | 🐍 Snake = Ular</div>
+<div class="hl">"The cat is cute. The elephant is big. The bird can fly."</div>`,
+        quiz:[
+          {type:'pilgan',soal:'"Kucing" dalam Bahasa Inggris adalah...',opsi:['Dog','Cat','Cow','Bird'],jwb:1,hint:'Cat = kucing, Dog = anjing'},
+          {type:'pilgan',soal:'"Elephant" artinya...',opsi:['Singa','Harimau','Gajah','Buaya'],jwb:2,hint:'Elephant = binatang besar berbelalai'},
+          {type:'bs',soal:'"Bird" artinya ikan.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Bird = burung, Fish = ikan'},
+          {type:'pilgan',soal:'Hewan yang bersuara "moo" dalam Bahasa Inggris disebut...',opsi:['Chicken','Dog','Cow','Cat'],jwb:2,hint:'Cow = sapi yang bersuara moo'},
+          {type:'pilgan',soal:'"Frog" artinya...',opsi:['Ular','Katak','Tikus','Kelinci'],jwb:1,hint:'Frog = katak yang bisa melompat'},
+        ]},
+    ]},
+  paibp:{emoji:'🕌',title:'Islamic Garden',sub:'PAIBP',
+    materi:[
+      {icon:'☪️',name:'Rukun Islam',desc:'Lima rukun Islam',level:'Mudah',
+        tujuan:'Siswa dapat menyebutkan dan memahami 5 Rukun Islam',
+        isi:`<h3>☪️ Lima Rukun Islam</h3>Rukun Islam adalah 5 kewajiban dasar bagi setiap Muslim.
+<div class="exbox">1. 🌙 <b>Syahadat</b> – Bersaksi tiada Tuhan selain Allah<br>2. 🙏 <b>Shalat</b> – Shalat 5 waktu (Subuh, Dzuhur, Ashar, Maghrib, Isya)<br>3. 💰 <b>Zakat</b> – Membayar zakat bagi yang mampu<br>4. 🌙 <b>Puasa</b> – Berpuasa di bulan Ramadhan<br>5. 🕋 <b>Haji</b> – Haji bagi yang mampu</div>
+<div class="hl">"Rukun Islam = fondasi agama Islam, seperti tiang sebuah bangunan"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Berapa jumlah Rukun Islam?',opsi:['4','5','6','7'],jwb:1,hint:'Islam punya 5 rukun wajib'},
+          {type:'pilgan',soal:'Rukun Islam yang pertama adalah...',opsi:['Shalat','Puasa','Syahadat','Zakat'],jwb:2,hint:'Syahadat = bersaksi/pengakuan iman'},
+          {type:'pilgan',soal:'Shalat wajib dilakukan berapa kali sehari?',opsi:['3 kali','4 kali','5 kali','6 kali'],jwb:2,hint:'Subuh, Dzuhur, Ashar, Maghrib, Isya'},
+          {type:'bs',soal:'Puasa dilakukan di bulan Ramadhan.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Rukun Islam ke-4 adalah puasa Ramadhan'},
+          {type:'pilgan',soal:'Ibadah haji dilakukan di negara...',opsi:['Mesir','Turki','Arab Saudi','Yordania'],jwb:2,hint:'Haji dilaksanakan di Mekah dan Madinah'},
+        ]},
+      {icon:'🤲',name:'Doa Harian',desc:'Doa sehari-hari',level:'Mudah',
+        tujuan:'Siswa menghafal doa-doa harian',
+        isi:`<h3>🤲 Doa Harian</h3>Doa adalah permohonan kepada Allah SWT. Kita berdoa dalam setiap aktivitas sehari-hari.
+<div class="exbox"><b>Doa-doa Harian:</b><br>🍚 <b>Sebelum Makan:</b> Bismillahirrahmanirrahim<br>😴 <b>Sebelum Tidur:</b> Bismika Allahumma ahya wa amut<br>🌅 <b>Bangun Tidur:</b> Alhamdulillahilladzi ahyaana<br>🚪 <b>Keluar Rumah:</b> Bismillahi tawakkaltu 'alallah</div>
+<div class="hl">"Berdoa di awal aktivitas = memohon keberkahan dari Allah"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Doa yang dibaca sebelum makan dimulai dengan...',opsi:['Alhamdulillah','Bismillah','Subhanallah','Masya Allah'],jwb:1,hint:'Bismillah = Dengan nama Allah'},
+          {type:'bs',soal:'Membaca doa sebelum makan adalah sunnah.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Membaca bismillah sebelum makan dianjurkan dalam Islam'},
+          {type:'pilgan',soal:'Kalimat "Alhamdulillah" artinya...',opsi:['Dengan nama Allah','Segala puji bagi Allah','Maha Suci Allah','Allah Maha Besar'],jwb:1,hint:'Alhamdu = pujian, lillah = bagi Allah'},
+          {type:'pilgan',soal:'Doa bangun tidur dimulai dengan kata...',opsi:['Bismillah','Alhamdulillah','Subhanallah','Allahu Akbar'],jwb:1,hint:'Setelah bangun tidur, kita bersyukur dengan Alhamdulillah'},
+          {type:'bs',soal:'Kita boleh tidak berdoa saat melakukan aktivitas sehari-hari.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Sebagai Muslim, dianjurkan selalu berdoa dalam setiap aktivitas'},
+        ]},
+      {icon:'📿',name:'Rukun Iman',desc:'Enam rukun iman',level:'Mudah',
+        tujuan:'Siswa dapat menyebutkan 6 Rukun Iman',
+        isi:`<h3>🌟 Enam Rukun Iman</h3>Rukun Iman adalah 6 hal yang wajib dipercaya oleh setiap Muslim.
+<div class="exbox">1. 🌟 Iman kepada <b>Allah</b><br>2. 👼 Iman kepada <b>Malaikat</b><br>3. 📖 Iman kepada <b>Kitab-kitab Allah</b><br>4. 🕌 Iman kepada <b>Nabi & Rasul</b><br>5. ⚖️ Iman kepada <b>Hari Kiamat</b><br>6. 🎯 Iman kepada <b>Qada & Qadar</b></div>
+<div class="hl">"Qada & Qadar = ketentuan/takdir Allah atas segala sesuatu"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Berapa jumlah Rukun Iman?',opsi:['4','5','6','7'],jwb:2,hint:'Rukun Iman ada 6'},
+          {type:'pilgan',soal:'Rukun Iman yang pertama adalah iman kepada...',opsi:['Malaikat','Allah','Nabi','Kitab'],jwb:1,hint:'Iman kepada Allah adalah yang pertama dan utama'},
+          {type:'bs',soal:'Iman kepada Malaikat termasuk Rukun Iman.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Rukun Iman ke-2 adalah iman kepada Malaikat'},
+          {type:'pilgan',soal:'Iman kepada Hari Kiamat adalah Rukun Iman ke...',opsi:['4','5','6','3'],jwb:1,hint:'Urutan: Allah-Malaikat-Kitab-Nabi-Kiamat-Qada&Qadar'},
+          {type:'pilgan',soal:'Qada dan Qadar artinya percaya kepada...',opsi:['Nabi dan Rasul','Malaikat Allah','Takdir/ketentuan Allah','Kitab suci'],jwb:2,hint:'Qada & Qadar = ketentuan Allah (takdir)'},
+        ]},
+    ]},
+  ppkn:{emoji:'🇮🇩',title:'City of Unity',sub:'PPKn',
+    materi:[
+      {icon:'🦅',name:'Pancasila',desc:'Lima sila Pancasila',level:'Mudah',
+        tujuan:'Siswa hafal dan memahami 5 sila Pancasila',
+        isi:`<h3>🦅 Pancasila — Dasar Negara</h3>Pancasila adalah dasar negara Indonesia, terdiri dari 5 sila.
+<div class="exbox"><b>5 Sila Pancasila:</b><br>1. ⭐ Ketuhanan Yang Maha Esa<br>2. ⛓️ Kemanusiaan yang Adil dan Beradab<br>3. 🌴 Persatuan Indonesia<br>4. 🐃 Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan<br>5. ⚖️ Keadilan Sosial bagi Seluruh Rakyat Indonesia</div>
+<div class="hl">"Panca = lima, Sila = prinsip/dasar (dari bahasa Sansekerta)"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Pancasila terdiri dari berapa sila?',opsi:['4','5','6','7'],jwb:1,hint:'Panca artinya lima'},
+          {type:'pilgan',soal:'Sila pertama Pancasila berbunyi...',opsi:['Persatuan Indonesia','Ketuhanan Yang Maha Esa','Keadilan Sosial','Kemanusiaan yang Adil'],jwb:1,hint:'Sila pertama berhubungan dengan kepercayaan kepada Tuhan'},
+          {type:'bs',soal:'Lambang Pancasila adalah Garuda Pancasila.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Garuda = lambang negara sekaligus lambang Pancasila'},
+          {type:'pilgan',soal:'Sila "Persatuan Indonesia" dilambangkan dengan...',opsi:['Bintang','Rantai','Pohon beringin','Kepala banteng'],jwb:2,hint:'Pohon beringin = persatuan yang kokoh dan mengakar'},
+          {type:'pilgan',soal:'Pancasila lahir pada tanggal...',opsi:['17 Agustus 1945','1 Juni 1945','28 Oktober 1928','18 Agustus 1945'],jwb:1,hint:'Ditetapkan pada sidang BPUPKI, 1 Juni 1945'},
+        ]},
+      {icon:'🤝',name:'Gotong Royong',desc:'Semangat bekerja bersama',level:'Mudah',
+        tujuan:'Siswa memahami nilai gotong royong dalam kehidupan',
+        isi:`<h3>🤝 Gotong Royong</h3>Gotong royong adalah bekerja bersama-sama untuk mencapai tujuan bersama dengan suka rela.
+<div class="exbox"><b>Contoh Gotong Royong:</b><br>🏘️ Kerja bakti bersih-bersih kampung<br>🏗️ Membangun rumah bersama<br>📚 Belajar kelompok di sekolah<br>🌾 Memanen sawah bersama-sama</div>
+<div class="hl">"Berat sama dipikul, ringan sama dijinjing — itulah semangat gotong royong"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Gotong royong berarti...',opsi:['Bekerja sendiri','Bekerja bersama','Tidak mau membantu','Bersaing dengan orang lain'],jwb:1,hint:'Gotong royong = bersama-sama, saling membantu'},
+          {type:'bs',soal:'Kerja bakti membersihkan lingkungan adalah contoh gotong royong.',opsi:['✅ Benar','❌ Salah'],jwb:0,hint:'Kerja bakti dilakukan bersama-sama dengan suka rela'},
+          {type:'pilgan',soal:'Manfaat gotong royong adalah...',opsi:['Pekerjaan lebih lama selesai','Pekerjaan lebih cepat selesai','Lebih banyak biaya','Lebih melelahkan'],jwb:1,hint:'Bersama-sama membuat pekerjaan lebih ringan dan cepat'},
+          {type:'pilgan',soal:'Gotong royong mencerminkan sila Pancasila ke...',opsi:['1','2','3','4'],jwb:2,hint:'Persatuan Indonesia = bersatu, bekerja bersama'},
+          {type:'bs',soal:'Gotong royong hanya ada di pedesaan, tidak di kota.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Gotong royong bisa dilakukan di mana saja, termasuk di kota'},
+        ]},
+      {icon:'🌈',name:'Keberagaman',desc:'Suku, agama, budaya Indonesia',level:'Sedang',
+        tujuan:'Siswa memahami dan menghargai keberagaman di Indonesia',
+        isi:`<h3>🌈 Indonesia yang Beragam</h3>Indonesia adalah negara yang sangat beragam dengan ratusan suku, bahasa, dan budaya.
+<div class="exbox"><b>Keberagaman Indonesia:</b><br>👥 300+ suku bangsa<br>🗣️ 700+ bahasa daerah<br>⛪☪️🕌🛕 6 agama resmi<br>🎭 Ribuan jenis budaya & kesenian</div>
+<div class="hl">"Bhinneka Tunggal Ika = Berbeda-beda tetapi tetap satu jua"</div>`,
+        quiz:[
+          {type:'pilgan',soal:'Semboyan negara Indonesia adalah...',opsi:['Merdeka atau Mati','Bhinneka Tunggal Ika','Garuda Pancasila','Satu Nusa Satu Bangsa'],jwb:1,hint:'Semboyan pada pita Garuda Pancasila'},
+          {type:'pilgan',soal:'"Bhinneka Tunggal Ika" artinya...',opsi:['Merdeka selamanya','Berbeda-beda tetapi tetap satu','Satu bangsa satu bahasa','Bersatu kita teguh'],jwb:1,hint:'Bhinneka = beragam/berbeda, Tunggal Ika = tetap satu'},
+          {type:'bs',soal:'Indonesia hanya memiliki satu suku bangsa.',opsi:['✅ Benar','❌ Salah'],jwb:1,hint:'Indonesia punya 300+ suku bangsa yang beragam'},
+          {type:'pilgan',soal:'Sikap yang tepat terhadap keberagaman adalah...',opsi:['Memilih berteman hanya sesuku','Menghina budaya lain','Menghargai dan menghormati','Tidak mau belajar budaya lain'],jwb:2,hint:'Keberagaman adalah kekuatan jika kita saling menghargai'},
+          {type:'pilgan',soal:'Jumlah agama yang diakui resmi di Indonesia adalah...',opsi:['4','5','6','7'],jwb:2,hint:'Islam, Kristen, Katolik, Hindu, Buddha, Konghucu = 6 agama'},
+        ]},
+    ]},
+};
+
+// ═══════ ENTER WORLD ═══════
+function enterWorld(wk){
+  if(!ST.acc){toast('Login dulu ya!');return;}
+  ST.currentWorld=wk;
+  const w=WORLDS[wk];
+  document.getElementById('mpEm').textContent=w.emoji;
+  document.getElementById('mpTtl').textContent=w.sub;
+  document.getElementById('mpSub').textContent=w.title+' — Pilih materi';
+  const a=ST.acc;
+  document.getElementById('mlist').innerHTML=w.materi.map((m,i)=>{
+    const done=a.completedMateri[wk+'_'+i];
+    return `<div class="mitem" onclick="enterMateri(${i})">
+      <div class="mico">${m.icon}</div>
+      <div class="minfo">
+        <div class="mnm">${m.name} ${done?'✅':''}</div>
+        <div class="mdesc">${m.desc}</div>
+      </div>
+      <div class="mbadge ${m.level==='Sedang'?'med':m.level==='Sulit'?'hrd':''}">${m.level}</div>
+    </div>`;
+  }).join('');
+  showPage('mapel');
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nb-mapel').classList.add('active');
+}
+
+function enterMateri(idx){
+  const m=WORLDS[ST.currentWorld].materi[idx];
+  ST.currentMateriIdx=idx;
+  ST.currentMateri=m;
+  document.getElementById('bContent').innerHTML=`
+    <div class="goal-box">🎯 <b>Tujuan:</b> ${m.tujuan}</div>
+    <div class="learn-card">
+      <div class="learn-ttl">${m.name}</div>
+      <div class="learn-body">${m.isi}</div>
+    </div>`;
+  showPage('belajar');
+}
+
+// ═══════ QUIZ ═══════
+function startQuiz(){
+  if(!ST.currentMateri){toast('Pilih materi dulu!');return;}
+  ST.qqs=[...ST.currentMateri.quiz];
+  ST.qIdx=0; ST.qScore=0; ST.qStart=Date.now(); ST.qAnswered=false;
+  renderQ();
+  showPage('kuis');
+}
+
+function renderQ(){
+  const q=ST.qqs[ST.qIdx];
+  const tot=ST.qqs.length;
+  const pct=(ST.qIdx/tot)*100;
+  document.getElementById('qProgTxt').textContent=`Soal ${ST.qIdx+1} dari ${tot}`;
+  document.getElementById('qScoreTxt').textContent=`✅ ${ST.qScore} benar`;
+  document.getElementById('qFill').style.width=pct+'%';
+  ST.qAnswered=false;
+  const L=['A','B','C','D'];
+  const opts=q.opsi.map((o,i)=>`
+    <button class="opt" onclick="ansQ(${i})" id="op${i}">
+      <span class="opt-ltr">${L[i]}</span>${o}
+    </button>`).join('');
+  const tLabel={pilgan:'Pilihan Ganda',bs:'Benar / Salah'}[q.type]||'Soal';
+  document.getElementById('qContent').innerHTML=`
+    <div class="qcard">
+      <div class="qtype">${tLabel}</div>
+      <div class="qtxt">${q.soal}</div>
+      <div class="opts">${opts}</div>
+      <div id="qFb"></div>
+    </div>
+    <button class="btn btn-s" onclick="skipQ()" style="margin-top:8px">⏭ Lewati Soal</button>`;
+}
+
+function ansQ(idx){
+  if(ST.qAnswered) return;
+  ST.qAnswered=true;
+  const q=ST.qqs[ST.qIdx];
+  const ok=idx===q.jwb;
+  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  document.getElementById('op'+idx).classList.add(ok?'ok':'ng');
+  if(!ok) document.getElementById('op'+q.jwb).classList.add('ok');
+  if(ok){ ST.qScore++; document.getElementById('qScoreTxt').textContent=`✅ ${ST.qScore} benar`; toast('🎉 Benar!'); }
+  document.getElementById('qFb').innerHTML=`
+    <div class="aifb">
+      <div class="ai-lbl">🤖 AI Tutor</div>
+      <div class="ai-txt">${ok?'✅ <b>Jawaban benar!</b> Hebat! ':'💡 <b>Hampir benar!</b> '}${q.hint}</div>
+    </div>`;
+  setTimeout(()=>{ ST.qIdx++; if(ST.qIdx<ST.qqs.length) renderQ(); else showResults(); }, 1900);
+}
+
+function skipQ(){ ST.qIdx++; if(ST.qIdx<ST.qqs.length) renderQ(); else showResults(); }
+
+function showResults(){
+  const tot=ST.qqs.length;
+  const pct=Math.round(ST.qScore/tot*100);
+  const elapsed=Math.round((Date.now()-ST.qStart)/1000);
+  const xpEarned=ST.qScore*10+(pct===100?50:pct>=80?20:0);
+
+  // Simpan progress
+  const a=ST.acc;
+  const key=ST.currentWorld+'_'+ST.currentMateriIdx;
+  const prev=a.completedMateri[key]||{};
+  a.completedMateri[key]={
+    done:true, bestScore:Math.max(pct, prev.bestScore||0),
+    badge: pct>=80, lastPlayed: new Date().toISOString()
+  };
+  if(pct>=80 && !prev.badge){
+    if(!a.badges.includes(ST.currentMateri.name)) a.badges.push(ST.currentMateri.name);
+  }
+  a.xp+=xpEarned;
+  if(a.xp>=a.level*100) a.level++;
+  saveCurrentAccount(a);
+  updateTopBar(); updateWorldProgress(); buildProfile(); buildLeaderboard();
+
+  let em='😊',ttl='Kerja Bagus!',msg='Terus semangat belajar!';
+  if(pct===100){em='🏆';ttl='SEMPURNA!';msg='Semua soal benar! Luar biasa!';}
+  else if(pct>=80){em='🌟';ttl='Hebat!';msg='Hampir sempurna! Terus berlatih!';}
+  else if(pct>=60){em='💪';ttl='Lumayan!';msg='Bisa lebih baik! Coba lagi ya!';}
+  else{em='📚';ttl='Tetap Semangat!';msg='Pelajari materinya lagi ya!';}
+
+  document.getElementById('rEm').textContent=em;
+  document.getElementById('rTtl').textContent=ttl;
+  document.getElementById('rMsg').textContent=msg;
+  document.getElementById('rScore').textContent=pct+'%';
+  document.getElementById('sBenar').textContent=ST.qScore;
+  document.getElementById('sSalah').textContent=tot-ST.qScore;
+  document.getElementById('sWaktu').textContent=elapsed+'s';
+  document.getElementById('xpPill').textContent=`⭐ +${xpEarned} XP`;
+
+  const bdgs=[];
+  if(pct===100) bdgs.push('🏅 Sempurna');
+  if(pct>=80) bdgs.push('⭐ Bintang');
+  if(elapsed<30) bdgs.push('⚡ Kilat');
+  if(ST.qScore>=3) bdgs.push('🧠 Cerdas');
+  document.getElementById('bdgRow').innerHTML=bdgs.map(b=>`<div class="bdg">${b}</div>`).join('');
+
+  showPage('hasil');
+}
+
+// ═══════ BOOT ═══════
+buildLeaderboard();
+</script>
+</body>
+</html>
